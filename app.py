@@ -1,19 +1,22 @@
-import sqlite3
+from flask import Flask, request, render_template
+from flask_sqlalchemy import SQLAlchemy
 
-from flask import Flask, render_template
 
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///register.db'
+# app.secret_key = "__privatekey__"
 
-app=Flask(__name__,template_folder='template')
 
+#FOR INDEX PAGE REDIRECT
 @app.route('/')
 def index():
-    conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM posts').fetchall()
-    conn.close()
-    return render_template('index.html', posts=posts)
+    return render_template('index.html')
 
-app.run(host="localhost", debug=True)
+@app.route('/login')
+def login():
+    return render_template('login.html')
+    
+if __name__ == "__main__":
+    app.run(debug=True)
+
+
